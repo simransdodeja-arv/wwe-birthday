@@ -71,6 +71,9 @@
     overflow:hidden;
     box-shadow:0 0 30px rgba(255,255,255,0.2);
   }
+
+  <div class="smoke"></div>
+  
   .rope{
     position:absolute;
     width:100%;
@@ -83,27 +86,26 @@
   .bottom{ bottom:20px; }
 
   /* Smoke effect */
-  .smoke{
-    position:absolute;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-    z-index:10;
-  }
-  .smoke div{
-    position:absolute;
-    width:60px;
-    height:60px;
-    background:rgba(255,255,255,0.08);
-    border-radius:50%;
-    animation:rise 5s linear infinite;
-    filter:blur(8px);
-  }
-  @keyframes rise{
-    0%{ transform:translateY(100%) scale(0.5); opacity:0; }
-    50%{ opacity:0.6; }
-    100%{ transform:translateY(-50%) scale(1); opacity:0; }
-  }
+  .smoke {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('smoke.gif') center center no-repeat;
+  background-size: cover;
+  pointer-events: none; /* lets you click behind it */
+  opacity: 0.7; /* adjust visibility */
+  z-index: 5; /* make sure it's above the ring but below popups */
+  animation: fadeSmoke 12s infinite;
+}
+
+@keyframes fadeSmoke {
+  0% { opacity: 0; }
+  30% { opacity: 0.7; }
+  70% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
 
   /* Slideshow */
   .slideshow{ width:300px; height:300px; margin:14px auto; overflow:hidden; border-radius:12px; border:5px solid #222; position:relative; background:#111; }
@@ -366,6 +368,7 @@ addWishBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
