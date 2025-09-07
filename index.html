@@ -130,7 +130,24 @@
   }
 
   /* Avatars pop-in */
-  .avatar-pop{ position:fixed; width:80px; height:80px; border-radius:50%; background:var(--accent); color:#fff; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.2rem; top:20%; left:50%; transform:translateX(-50%) scale(0); opacity:0; z-index:5000; transition:all 0.5s ease; pointer-events:none; }
+.avatar-pop{
+  position:fixed;
+  width:120px;        /* increased size */
+  height:120px;       /* increased size */
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:900;
+  font-size:1.8rem;   /* bigger font */
+  top:10%;             /* near top */
+  z-index:5000;
+  transition:all 0.4s ease;  /* faster animation */
+  pointer-events:none;
+  opacity:0;
+}
 
   /* Fireworks canvas */
   canvas#fireworksCanvas{ position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:999; }
@@ -294,24 +311,32 @@ const avatarImages = [
 
 const avatarPop = document.getElementById('avatarPop');
 
-setInterval(() => {
-  const imgSrc = avatarImages[Math.floor(Math.random() * avatarImages.length)];
-  avatarPop.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = imgSrc;
-  img.style.width = '80px';
-  img.style.height = '80px';
-  img.style.borderRadius = '50%';
-  img.style.objectFit = 'cover';
-  avatarPop.appendChild(img);
-  avatarPop.style.transform = 'translateX(-50%) scale(1)';
-  avatarPop.style.opacity = '1';
-  setTimeout(() => {
-    avatarPop.style.transform = 'translateX(-50%) scale(0)';
-    avatarPop.style.opacity = '0';
-  }, 2500);
-}, 15000);
+let side = 'left'; // to alternate sides
 
+setInterval(()=>{
+  const letter = avatars[Math.floor(Math.random()*avatars.length)];
+  avatarPop.textContent = letter;
+  
+  // Alternate left and right
+  if(side === 'left'){
+    avatarPop.style.left = '10%';
+    avatarPop.style.right = '';
+    side = 'right';
+  } else {
+    avatarPop.style.right = '10%';
+    avatarPop.style.left = '';
+    side = 'left';
+  }
+
+  avatarPop.style.transform = 'scale(1)';
+  avatarPop.style.opacity = '1';
+
+  setTimeout(()=>{
+    avatarPop.style.transform = 'scale(0)';
+    avatarPop.style.opacity = '0';
+  }, 1800);  // stays for 1.8 seconds (faster)
+  
+}, 4000); // pops every 4 seconds instead of 15
 
 /* ---------- Interactive Slam / Punch ---------- */
 function screenShake(){
@@ -341,6 +366,7 @@ addWishBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
