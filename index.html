@@ -301,23 +301,21 @@ function triggerCelebration(){
   for(let i=0;i<6;i++){ setTimeout(()=>spawnFirework(canvas.width*(0.15+Math.random()*0.7),canvas.height*0.2+Math.random()*80),i*300); }
 }
 
-/* ---------- Avatars Pop-in with PNGs ---------- */
 const avatarImages = [
   'romanReigns.png',
+  'johnCena.png',
   'rock.png',
-  'undertaker.png',
-  'johnCena.png'
+  'undertaker.png'
 ];
 
 const avatarPop = document.getElementById('avatarPop');
-
-let side = 'left'; // to alternate sides
+let side = 'left'; // alternate sides
 
 setInterval(()=>{
-  const letter = avatars[Math.floor(Math.random()*avatars.length)];
-  avatarPop.textContent = letter;
-  
-  // Alternate left and right
+  const randomImg = avatarImages[Math.floor(Math.random()*avatarImages.length)];
+  avatarPop.innerHTML = `<img src="${randomImg}" alt="WWE Star">`;
+
+  // Alternate left/right
   if(side === 'left'){
     avatarPop.style.left = '10%';
     avatarPop.style.right = '';
@@ -328,15 +326,18 @@ setInterval(()=>{
     side = 'left';
   }
 
+  // Show image
   avatarPop.style.transform = 'scale(1)';
   avatarPop.style.opacity = '1';
 
+  // Hide after 1.8 seconds
   setTimeout(()=>{
     avatarPop.style.transform = 'scale(0)';
     avatarPop.style.opacity = '0';
-  }, 1800);  // stays for 1.8 seconds (faster)
-  
-}, 4000); // pops every 4 seconds instead of 15
+  }, 1800);
+
+}, 4000); // pops every 4 seconds
+
 
 /* ---------- Interactive Slam / Punch ---------- */
 function screenShake(){
@@ -366,6 +367,7 @@ addWishBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
