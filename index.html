@@ -129,24 +129,23 @@
     font-size:1rem;
   }
 
-  /* Avatars pop-in */
+  /* Avatars pop-in as images */
 .avatar-pop{
   position:fixed;
-  width:120px;        /* increased size */
-  height:120px;       /* increased size */
+  width:120px;          /* bigger */
+  height:120px;         /* bigger */
   border-radius:50%;
-  background:var(--accent);
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-weight:900;
-  font-size:1.8rem;   /* bigger font */
-  top:10%;             /* near top */
+  overflow:hidden;
+  top:10%;              /* near top */
   z-index:5000;
-  transition:all 0.4s ease;  /* faster animation */
+  transition:all 0.4s ease;
   pointer-events:none;
   opacity:0;
+}
+.avatar-pop img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
   /* Fireworks canvas */
@@ -367,6 +366,7 @@ addWishBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
