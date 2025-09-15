@@ -71,6 +71,7 @@
     overflow:hidden;
     box-shadow:0 0 30px rgba(255,255,255,0.2);
   }
+  
   .rope{
     position:absolute;
     width:100%;
@@ -81,29 +82,6 @@
   .top{ top:20px; }
   .mid{ top:50%; transform:translateY(-50%); }
   .bottom{ bottom:20px; }
-
-  /* Smoke effect */
-  .smoke{
-    position:absolute;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-    z-index:10;
-  }
-  .smoke div{
-    position:absolute;
-    width:60px;
-    height:60px;
-    background:rgba(255,255,255,0.08);
-    border-radius:50%;
-    animation:rise 5s linear infinite;
-    filter:blur(8px);
-  }
-  @keyframes rise{
-    0%{ transform:translateY(100%) scale(0.5); opacity:0; }
-    50%{ opacity:0.6; }
-    100%{ transform:translateY(-50%) scale(1); opacity:0; }
-  }
 
   /* Slideshow */
   .slideshow{ width:300px; height:300px; margin:14px auto; overflow:hidden; border-radius:12px; border:5px solid #222; position:relative; background:#111; }
@@ -129,8 +107,24 @@
     font-size:1rem;
   }
 
-  /* Avatars pop-in */
-  .avatar-pop{ position:fixed; width:80px; height:80px; border-radius:50%; background:var(--accent); color:#fff; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.2rem; top:20%; left:50%; transform:translateX(-50%) scale(0); opacity:0; z-index:5000; transition:all 0.5s ease; pointer-events:none; }
+  /* Avatars pop-in as images */
+.avatar-pop{
+  position:fixed;
+  width:120px;          /* bigger */
+  height:120px;         /* bigger */
+  border-radius:50%;
+  overflow:hidden;
+  top:10%;              /* near top */
+  z-index:5000;
+  transition:all 0.4s ease;
+  pointer-events:none;
+  opacity:0;
+}
+.avatar-pop img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
   /* Fireworks canvas */
   canvas#fireworksCanvas{ position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:999; }
@@ -146,9 +140,8 @@
 <!-- Music bar -->
 <div class="music-bar">
   <audio id="themeAudio" loop>
-    <source src="theme.mp3" type="audio/mpeg">
-    Your browser doesn't support audio.
-  </audio>
+  <source src="theme.mp3" type="audio/mpeg">
+</audio>
   <button id="playBtn">▶️ Play Entrance Music</button>
   <button id="pauseBtn" style="display:none">⏸️ Pause Music</button>
 </div>
@@ -165,7 +158,7 @@
     <div class="rope top"></div>
     <div class="rope mid"></div>
     <div class="rope bottom"></div>
-    <div class="smoke" id="smoke"></div>
+   
   </div>
 
   <!-- Action Buttons -->
@@ -180,8 +173,7 @@
     <img src="arvind1.jpg" class="active" alt="Arvind photo 1">
     <img src="arvind2.jpg" alt="Arvind photo 2">
     <img src="arvind3.jpg" alt="Arvind photo 3">
-  <img src="arvind3.jpg" alt="Arvind photo 3">
-  <img src="arvind4.jpg" alt="Arvind photo 4">
+    <img src="arvind4.jpg" alt="Arvind photo 4">
   <img src="arvind5.jpg" alt="Arvind photo 5">
   <img src="arvind6.jpg" alt="Arvind photo 6">
   <img src="arvind7.jpg" alt="Arvind photo 7">
@@ -248,17 +240,6 @@ pauseBtn.addEventListener('click',()=>{ audio.pause(); pauseBtn.style.display='n
 const slides=document.querySelectorAll('.slideshow img'); let si=0;
 setInterval(()=>{ slides[si].classList.remove('active'); si=(si+1)%slides.length; slides[si].classList.add('active'); },3000);
 
-/* ---------- Smoke Effect ---------- */
-const smokeEl=document.getElementById('smoke');
-for(let i=0;i<15;i++){
-  const div=document.createElement('div');
-  div.style.left=Math.random()*100+'%';
-  div.style.animationDelay=Math.random()*5+'s';
-  div.style.width=(30+Math.random()*40)+'px';
-  div.style.height=(30+Math.random()*40)+'px';
-  smokeEl.appendChild(div);
-}
-
 /* ---------- Fireworks ---------- */
 const canvas=document.getElementById('fireworksCanvas');
 const ctx=canvas.getContext('2d');
@@ -294,33 +275,42 @@ function triggerCelebration(){
   for(let i=0;i<6;i++){ setTimeout(()=>spawnFirework(canvas.width*(0.15+Math.random()*0.7),canvas.height*0.2+Math.random()*80),i*300); }
 }
 
-/* ---------- Avatars Pop-in with PNGs ---------- */
 const avatarImages = [
   'romanReigns.png',
+  'johnCena.png',
   'rock.png',
-  'undertaker.png',
-  'johnCena.png'
+  'undertaker.png'
 ];
 
 const avatarPop = document.getElementById('avatarPop');
+let side = 'left'; // alternate sides
 
-setInterval(() => {
-  const imgSrc = avatarImages[Math.floor(Math.random() * avatarImages.length)];
-  avatarPop.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = imgSrc;
-  img.style.width = '80px';
-  img.style.height = '80px';
-  img.style.borderRadius = '50%';
-  img.style.objectFit = 'cover';
-  avatarPop.appendChild(img);
-  avatarPop.style.transform = 'translateX(-50%) scale(1)';
+setInterval(()=>{
+  const randomImg = avatarImages[Math.floor(Math.random()*avatarImages.length)];
+  avatarPop.innerHTML = `<img src="${randomImg}" alt="WWE Star">`;
+
+  // Alternate left/right
+  if(side === 'left'){
+    avatarPop.style.left = '10%';
+    avatarPop.style.right = '';
+    side = 'right';
+  } else {
+    avatarPop.style.right = '10%';
+    avatarPop.style.left = '';
+    side = 'left';
+  }
+
+  // Show image
+  avatarPop.style.transform = 'scale(1)';
   avatarPop.style.opacity = '1';
-  setTimeout(() => {
-    avatarPop.style.transform = 'translateX(-50%) scale(0)';
+
+  // Hide after 1.8 seconds
+  setTimeout(()=>{
+    avatarPop.style.transform = 'scale(0)';
     avatarPop.style.opacity = '0';
-  }, 2500);
-}, 15000);
+  }, 1800);
+
+}, 4000); // pops every 4 seconds
 
 
 /* ---------- Interactive Slam / Punch ---------- */
@@ -351,3 +341,11 @@ addWishBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
